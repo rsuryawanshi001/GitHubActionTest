@@ -42,23 +42,5 @@ jobs:
        name: release.aab
        path: .app/build/outputs/bundle/release/release.aab
     
-    - name: Generate Release APK
-      run: ./gradlew assembleRelease
-     
-    - name: Sign APK
-      uses: r0adkll/sign-android-release@v1
-       
-      id: sign_app_apk
-      with:
-          releaseDirectory: app/build/outputs/apk/release
-          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
-          alias: ${{ secrets.ALIAS }}
-          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
-          keyPassword: ${{ secrets.KEY_PASSWORD }}
    
-    - name: Upload apk
-    - uses: actions/upload-artifact@v2.2.3
-      with:
-       name: release.apk
-       path: .app/build/outputs/apk/release/release.apk
      
