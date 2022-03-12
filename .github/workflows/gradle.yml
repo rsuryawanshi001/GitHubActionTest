@@ -35,8 +35,7 @@ jobs:
           alias: ${{ secrets.ALIAS }}
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
-     
-    - name: Upload aab
+
     - uses: actions/upload-artifact@v2.2.3
       with:
        name: release.aab
