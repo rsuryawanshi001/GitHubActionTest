@@ -31,6 +31,28 @@ jobs:
       uses: actions/upload-artifact@v2.2.3
       with:
         name: app
-        path: ./app/build/outputs/apk/debug/app-debug.apk    
+        path: ./app/build/outputs/apk/debug/app-debug.apk  
+        
+    - name: Build Release AAB      
+      run: ./gradlew bundleRelease
+
+    - name: Sign AAB              
+      uses: r0adkll/sign-android-release@v1
+      with:
+          releaseDirectory: app/build/outputs/bundle/release
+          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+          alias: ${{ secrets.ALIAS }}
+          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}  
+          
+    - uses: actions/upload-artifact@master
+      with:
+          name: release.apk
+          path: ${{steps.sign_app.outputs.signedReleaseFile}}
+          
       
-      
+    - uses: actions/upload-artifact@master
+      with:
+          name: mapping.txt
+          path: app/build/outputs/mapping/release/mapping.txt  
+     
