@@ -21,8 +21,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
    
-    #- name: Make Gradle Executable
-    #  run: chmod +x. /gradlew 
+    - name: Make Gradle Executable
+      run: chmod +x gradlew 
     
     - name: Create build
       run: ./gradlew clean assembleDebug  
