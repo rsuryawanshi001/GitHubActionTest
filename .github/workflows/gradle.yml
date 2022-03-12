@@ -39,7 +39,7 @@ jobs:
     - uses: actions/upload-artifact@v2.2.3
       with:
        name: release.aab
-       path: .app/build/outputs/bundle/release/
+       path: .app/build/outputs/bundle/release/**.aab
     
    
      
