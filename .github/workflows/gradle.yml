@@ -36,10 +36,39 @@ jobs:
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
 
-    - uses: actions/upload-artifact@v2.2.3
+
+    - uses: actions/upload-artifact@master
       with:
-       name: release.aab
-       path: .app/build/outputs/bundle/release/**.aab
+          name: release.aab
+          path: ${{steps.sign_app_bundle.outputs.signedReleaseFile}}
+     
+    - uses: actions/upload-artifact@master
+      with:
+          name: mapping.txt
+          path: app/build/outputs/mapping/release/mapping.txt
     
-   
+    - name: Generate Release .apk
+      run: ./gradlew assembleRelease
+     
+    - name: Sign .apk
+      uses: r0adkll/sign-android-release@v1
+       
+      id: sign_app_apk
+      with:
+          releaseDirectory: app/build/outputs/apk/release
+          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+          alias: ${{ secrets.ALIAS }}
+          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+
+    - uses: actions/upload-artifact@master
+      with:
+          name: release.apk
+          path: ${{steps.sign_app_apk.outputs.signedReleaseFile}}
+     
+    - uses: actions/upload-artifact@master
+      with:
+          name: mapping.txt
+          path: app/build/outputs/mapping/release/mapping.txt  
      
