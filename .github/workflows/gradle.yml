@@ -30,7 +30,7 @@ jobs:
        
       id: sign_app_bundle
       with:
-          releaseDirectory: app/build/outputs
+          releaseDirectory: app/build/outputs/bundle/release
           signingKeyBase64: ${{ secrets.SIGNING_KEY }}
           alias: ${{ secrets.ALIAS }}
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
