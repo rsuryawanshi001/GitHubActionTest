@@ -17,3 +17,11 @@ jobs:
       run : |
        mkdir /home/runner/work/ravi   
        echo $RUNNER_TEMP
+       
+    - name: Get secret from base64
+      env:
+       KEYSTORE_BASE64: ${{ secrets.SIGNING_KEY }}
+      run: |
+       echo import certificate from secrets and regenerate the file
+       echo $KEYSTORE_BASE64 | base64 -d > /home/runner/work/ravi   
+
