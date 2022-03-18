@@ -1,0 +1,23 @@
+name: testing
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+   
+    - name: Get secret from base64
+     env:
+      KEYSTORE_BASE64: ${{ secrets.SIGNING_KEY  }}
+    run: |
+      echo import certificate from secrets and regenerate the file
+      echo $KEYSTORE_BASE64 | base64 -d > $RUNNER_TEMP/my_production.keystore
+     
