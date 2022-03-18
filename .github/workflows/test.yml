@@ -13,6 +13,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
    
-    - name: Get secret from base64
-      run : echo ${GITHUB_WORKSPACE}
+    - name: create directory
+      run : /home/runner/work/ravi
      
