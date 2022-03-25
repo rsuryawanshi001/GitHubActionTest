@@ -1,0 +1,71 @@
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
+
+name: Java CI with Gradle
+
+on:
+  workflow_dispatch
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+   
+    - name: Make Gradle Executable
+      run: chmod +x gradlew 
+
+    - name: Generate Release .aab
+      run: ./gradlew bundleRelease
+     
+    - name: Sign .aab
+      uses: r0adkll/sign-android-release@v1
+       
+      id: sign_app_bundle
+      with:
+          releaseDirectory: app/build/outputs/bundle/release
+          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+          alias: ${{ secrets.ALIAS }}
+          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+
+    - uses: actions/upload-artifact@master
+      with:
+          name: release.aab
+          path: ${{steps.sign_app_bundle.outputs.signedReleaseFile}}
+     
+    - uses: actions/upload-artifact@master
+      with:
+          name: mapping.txt
+          path: app/build/outputs/mapping/release/mapping.txt
+    
+    - name: Generate Release .apk
+      run: ./gradlew assembleRelease
+     
+    - name: Sign .apk
+      uses: r0adkll/sign-android-release@v1
+       
+      id: sign_app_apk
+      with:
+          releaseDirectory: app/build/outputs/apk/release
+          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+          alias: ${{ secrets.ALIAS }}
+          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+
+    - uses: actions/upload-artifact@master
+      with:
+          name: release.apk
+          path: ${{steps.sign_app_apk.outputs.signedReleaseFile}}
+     
+    - uses: actions/upload-artifact@master
+      with:
+          name: mapping.txt
+          path: app/build/outputs/mapping/release/mapping.txt  
+     
